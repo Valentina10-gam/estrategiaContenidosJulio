@@ -14,3 +14,4 @@ Landing/dashboard local en HTML, CSS y JavaScript para presentar la estrategia o
 - `styles.css`: identidad visual, responsive y animaciones.
 - `script.js`: filtros, buscador, modal, navegación y progreso de lectura.
 - `data.js`: datos editables de las 20 piezas estratégicas.
+Prueba
