@@ -381,7 +381,7 @@ h3 { margin-bottom: 10px; color: var(--purple); font-size: 1.08rem; }
   position: relative;
   display: grid;
   gap: 10px;
-  min-height: 236px;
+  min-height: 260px;
   padding: 20px 18px 16px;
   text-align: left;
   border: 1px solid var(--line);
@@ -399,6 +399,39 @@ h3 { margin-bottom: 10px; color: var(--purple); font-size: 1.08rem; }
   right: 18px;
   height: 4px;
   background: var(--accent, var(--cyan));
+}
+.format-badge {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  color: var(--white);
+  background: var(--purple);
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.format-badge svg {
+  width: 14px;
+  height: 14px;
+}
+.format-reel { background: #250045; box-shadow: 0 8px 18px rgba(37,0,69,0.18); }
+.format-estatico, .format-trend { color: var(--purple); background: #DFF5FC; }
+.format-expediente { background: #2F6F89; }
+.format-bitacora { background: #2F6F89; }
+.format-carta, .format-post { background: #3F3A66; }
+.format-glosario { color: var(--purple); background: #DFF5FC; }
+.format-reveal { background: #3F3A66; }
+.format-carrusel { color: var(--purple); background: #BDEFFF; }
+.format-caso { background: #5A3A7A; }
+.format-otro { background: var(--purple-2); }
+.modal-format {
+  margin: 4px 0 16px;
 }
 .piece-date { color: var(--text); font-size: 0.72rem; font-weight: 700; }
 .piece-card h3 { font-size: 0.9rem; line-height: 1.28; }

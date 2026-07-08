@@ -3,12 +3,18 @@ const filters = [
   "Instagram / Facebook",
   "LinkedIn",
   "Reel",
-  "Carrusel",
+  "TikTok",
+  "YouTube Shorts",
+  "Estático",
+  "Expediente técnico",
+  "Carta ejecutiva",
+  "Testimonios",
   "Hídriko",
   "TKC Security",
-  "Sectores",
-  "Autoridad",
-  "Capacidades técnicas"
+  "Requiere validación",
+  "Requiere material",
+  "Alta prioridad",
+  "Publicadas"
 ];
 
 const accents = {
@@ -22,7 +28,22 @@ const accents = {
   "Prevención y seguimiento": "#3F3A66",
   "Seguimiento y trazabilidad": "#3F3A66",
   "Sectores y operación": "#250045",
-  "Contenido de oportunidad": "#53C6E8"
+  "Contenido de oportunidad": "#53C6E8",
+  "Prevención articulada": "#3F3A66",
+  "Contenido humano / TKC Corp": "#53C6E8",
+  "Centros comerciales": "#250045",
+  "Diferenciales / LinkedIn ejecutivo": "#3F3A66",
+  "Hoteles": "#250045",
+  "TKC Security (SST)": "#6E5BAA",
+  "Historia y trayectoria": "#53C6E8",
+  "Diferenciales frente a solo fumigar": "#3F3A66",
+  "Colegios y clínicas": "#250045",
+  "Testimonios / prueba social": "#53C6E8",
+  "Propiedad horizontal": "#250045",
+  "Diferenciales / restaurantes y alimentos": "#3F3A66",
+  "Cierre operativo del mes": "#53C6E8",
+  "Bodegas / industria": "#250045",
+  "Certificaciones y respaldo técnico": "#3F3A66"
 };
 
 const statusOptions = [
@@ -108,8 +129,12 @@ function renderCalendar() {
 function renderPieceCard(piece) {
   const status = getPieceStatus(piece);
   const primarySchedule = getPublishSchedule(piece)[0];
+  const formatType = getFormatType(piece);
   return `
     <article class="piece-card" role="button" tabindex="0" data-piece-id="${piece.id}" style="--accent:${accents[piece.pillar] || "#53C6E8"}">
+      <span class="format-badge format-${formatType.key}">
+        <i data-lucide="${formatType.icon}"></i>${formatType.label}
+      </span>
       <span class="piece-date">${piece.date}</span>
       <h3>${piece.title}</h3>
       <span class="status">${status.icon} ${status.value}</span>
@@ -151,9 +176,13 @@ function renderStories() {
 
 function openModal(piece) {
   const status = getPieceStatus(piece);
+  const formatType = getFormatType(piece);
   modalContent.innerHTML = `
     <p class="eyebrow">Ficha creativa de campaña · Pieza ${piece.id}</p>
     <h2>${piece.title}</h2>
+    <span class="format-badge format-${formatType.key} modal-format">
+      <i data-lucide="${formatType.icon}"></i>${formatType.label}
+    </span>
     <div class="modal-hero">
       <div>
         <strong>Material visual pendiente de confirmación</strong>
@@ -162,6 +191,7 @@ function openModal(piece) {
     </div>
     <div class="detail-grid">
       ${detail("Fecha", piece.date)}
+      ${detail("Tipo de pieza", formatType.description)}
       ${detail("Formato", piece.format)}
       ${detail("Red principal", piece.network)}
       ${detail("Adaptaciones", getAdaptations(piece))}
@@ -310,8 +340,12 @@ function getPieceStatus(piece) {
 function statusFromText(status) {
   const normalized = status.toLowerCase();
   if (normalized.includes("publicado")) return "Publicado";
+  if (normalized.includes("publicada")) return "Publicado";
   if (normalized.includes("listo")) return "Programar";
   if (normalized.includes("revisión")) return "En revisión";
+  if (normalized.includes("validación")) return "En revisión";
+  if (normalized.includes("edición")) return "En producción";
+  if (normalized.includes("material")) return "En producción";
   if (normalized.includes("pendiente")) return "En producción";
   return "Programar";
 }
@@ -373,6 +407,96 @@ function slotForNetwork(network, piece) {
   return {
     time: isStoryFriendly ? "5:30 p.m." : "10:00 a.m.",
     reason: "horario base para visibilidad orgánica"
+  };
+}
+
+function getFormatType(piece) {
+  const text = `${piece.format} ${piece.network} ${piece.title}`.toLowerCase();
+  if (text.includes("reel") || text.includes("tiktok") || text.includes("shorts") || text.includes("pov") || text.includes("entrevista") || text.includes("montaje") || text.includes("mini doc") || text.includes("split screen")) {
+    return {
+      key: "reel",
+      label: "Reel / video corto",
+      icon: "video",
+      description: "Pieza audiovisual para Reels, TikTok, YouTube Shorts o video social."
+    };
+  }
+  if (text.includes("expediente")) {
+    return {
+      key: "expediente",
+      label: "Expediente técnico",
+      icon: "folder-search",
+      description: "Formato documental/caso técnico con enfoque de hallazgo, registro o expediente."
+    };
+  }
+  if (text.includes("carta")) {
+    return {
+      key: "carta",
+      label: "LinkedIn / carta",
+      icon: "file-text",
+      description: "Pieza editorial ejecutiva para LinkedIn, tipo carta, nota o argumentación."
+    };
+  }
+  if (text.includes("bitácora") || text.includes("bitacora")) {
+    return {
+      key: "bitacora",
+      label: "Bitácora técnica",
+      icon: "clipboard-list",
+      description: "Formato de registro operativo con hallazgo, seguimiento o visita técnica."
+    };
+  }
+  if (text.includes("glosario")) {
+    return {
+      key: "glosario",
+      label: "Glosario técnico",
+      icon: "book-marked",
+      description: "Pieza educativa breve para explicar un concepto técnico."
+    };
+  }
+  if (text.includes("reveal")) {
+    return {
+      key: "reveal",
+      label: "Reveal de datos",
+      icon: "badge-check",
+      description: "Pieza de revelación o explicación de datos, sellos o credenciales."
+    };
+  }
+  if (text.includes("post argumentativo") || text.includes("post + adaptación")) {
+    return {
+      key: "post",
+      label: "Post editorial",
+      icon: "message-square-text",
+      description: "Post editorial o argumentativo con adaptación por canal cuando aplique."
+    };
+  }
+  if (text.includes("carrusel")) {
+    return {
+      key: "carrusel",
+      label: text.includes("catálogo") || text.includes("catalogo") ? "Carrusel catálogo" : "Carrusel",
+      icon: "panels-top-left",
+      description: "Secuencia gráfica para lectura por slides."
+    };
+  }
+  if (text.includes("estático") || text.includes("trend")) {
+    return {
+      key: "estatico",
+      label: text.includes("trend") ? "Trend" : "Estático",
+      icon: text.includes("trend") ? "sparkles" : "image",
+      description: text.includes("trend") ? "Contenido de oportunidad basado en tendencia." : "Pieza gráfica estática para feed."
+    };
+  }
+  if (text.includes("caso")) {
+    return {
+      key: "caso",
+      label: "Caso narrado",
+      icon: "book-open-text",
+      description: "Historia/caso anonimizado narrado como pieza editorial."
+    };
+  }
+  return {
+    key: "otro",
+    label: "Otro formato",
+    icon: "layout-template",
+    description: "Formato editorial específico de la parrilla."
   };
 }
 
